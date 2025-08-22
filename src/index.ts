@@ -41,11 +41,15 @@ async function bootstrap() {
     await server.start();
 
     const app = express();
-    app.use(cors());
+    // Configure CORS to allow requests from your frontend (replace with your actual frontend URL)
+    app.use(cors({
+        origin: ['http://localhost:8080', 'http://13.203.227.179:8080/graphql', 'http://localhost:5173', 'https://staging.dgcz5lzsbkjgq.amplifyapp.com/'], // add your frontend URLs here
+        credentials: true,
+    }));
     app.use(express.json()); // Needed for JSON parsing
     app.use(s3Routes); // Handle S3 presigned requests
 
-    server.applyMiddleware({ app }); // 👈 Integrate Apollo with Express
+    server.applyMiddleware({ app, cors: false }); // Disable Apollo's internal CORS, use Express CORS
 
     const PORT = process.env.PORT || 8080;
     app.listen(PORT, () => {
