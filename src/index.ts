@@ -43,9 +43,15 @@ async function bootstrap() {
     const app = express();
     // Configure CORS to allow requests from your frontend (replace with your actual frontend URL)
     app.use(cors({
-        origin: ['http://localhost:8080', 'http://13.203.227.179:8080/graphql', 'http://localhost:5173', 'https://staging.dgcz5lzsbkjgq.amplifyapp.com/'], // add your frontend URLs here
+        origin: [
+            "http://localhost:3000", // local React dev
+            "http://localhost:5173", // Vite dev
+            "http://13.203.227.179:8080", // if frontend also served from same EC2
+            "https://staging.dgcz5lzsbkjgq.amplifyapp.com" // Amplify app
+        ],
         credentials: true,
     }));
+
     app.use(express.json()); // Needed for JSON parsing
     app.use(s3Routes); // Handle S3 presigned requests
 
